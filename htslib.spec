@@ -6,9 +6,9 @@ Summary:        C library for high-throughput sequencing data formats
 # The entire source code is MIT except cram/ which is Modified-BSD
 License:        MIT and BSD
 URL:            http://www.htslib.org
-Source0:        %{name}-%{version}.tar.gz
+Source0:        https://github.com/samtools/%{name}/releases/download/%{version}/%{name}-%{version}.tar.bz2
 
-BuildRequires:	glibc-common, zlib-devel, ncurses
+BuildRequires:  glibc-common, zlib-devel, ncurses
 
 %description
 HTSlib is an implementation of a unified C library for accessing common file
@@ -40,10 +40,10 @@ developing applications that use %{name}.
 make %{?_smp_mflags}
 
 %install
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 %make_install prefix=/usr libdir=/usr/lib64
 make install-so %{?_smp_mflags} prefix=/usr libdir=/usr/lib64 DESTDIR=%{buildroot}
-find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
+find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %post -p /sbin/ldconfig
 
