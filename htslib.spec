@@ -1,5 +1,5 @@
 Name:           htslib
-Version:        1.3
+Version:        1.3.1
 Release:        1%{?dist}
 Summary:        C library for high-throughput sequencing data formats
 
@@ -44,8 +44,8 @@ make CFLAGS="%{optflags} -fPIC" %{?_smp_mflags}
 
 %install
 rm -rf %{buildroot}
-%make_install prefix=/usr libdir=%{_libdir} DESTDIR=%{buildroot}
-make install-so %{?_smp_mflags} prefix=/usr libdir=%{_libdir} DESTDIR=%{buildroot}
+%make_install prefix=%{_prefix} libdir=%{_libdir} DESTDIR=%{buildroot}
+make install-so %{?_smp_mflags} prefix=%{_prefix} libdir=%{_libdir} DESTDIR=%{buildroot}
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 rm -f %{buildroot}/%{_libdir}/libhts.a
