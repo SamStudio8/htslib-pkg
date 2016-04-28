@@ -77,5 +77,6 @@ rm -f %{buildroot}/%{_libdir}/libhts.a
 
 
 %changelog
-* Tue Apr 12 2016 makerpm
+* Tue Apr 26 2016 Sam Nicholls <sam.n@studio8media.co.uk> - 1.3.1-1
+- Initial version
 - 
