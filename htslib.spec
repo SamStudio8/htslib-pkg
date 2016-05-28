@@ -9,7 +9,6 @@ URL:            http://www.htslib.org
 Source0:        https://github.com/samtools/%{name}/releases/download/%{version}/%{name}-%{version}.tar.bz2
 
 BuildRequires:  glibc-common, zlib-devel, ncurses
-Provides:	libhts.so.1()(64bit)
 
 %description
 HTSlib is an implementation of a unified C library for accessing common file
@@ -44,8 +43,9 @@ make CFLAGS="%{optflags} -fPIC" %{?_smp_mflags}
 
 %install
 rm -rf %{buildroot}
-%make_install prefix=%{_prefix} libdir=%{_libdir} DESTDIR=%{buildroot}
+%make_install prefix=%{_prefix} libdir=%{_libdir}
 make install-so %{?_smp_mflags} prefix=%{_prefix} libdir=%{_libdir} DESTDIR=%{buildroot}
+chmod 755 %{buildroot}/%{_libdir}/libhts.so.%{version}
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 rm -f %{buildroot}/%{_libdir}/libhts.a
@@ -54,13 +54,11 @@ rm -f %{buildroot}/%{_libdir}/libhts.a
 
 %postun -p /sbin/ldconfig
 
-
 %files
-%doc
+%doc LICENSE NEWS
 %{_libdir}/libhts*.so.*
 
 %files devel
-%doc
 %{_includedir}/htslib
 %{_libdir}/pkgconfig/htslib.pc
 %{_mandir}/man5/faidx.5.gz
@@ -77,6 +75,11 @@ rm -f %{buildroot}/%{_libdir}/libhts.a
 
 
 %changelog
-* Tue Apr 26 2016 Sam Nicholls <sam.n@studio8media.co.uk> - 1.3.1-1
+* Sat May 28 2016 Sam Nicholls <sam@samnicholls.net>
+- Add LICENSE and NEWS to doc
+- Remove unnecessary DESTDIR from call to make_install macro
+- Remove explicit Provides
+* Thu Apr 28 2016 Sam Nicholls <sam@samnicholls.net> - 755 SO to permit strip
+* Tue Apr 26 2016 Sam Nicholls <sam@samnicholls.net> - 1.3.1-1
 - Initial version
 - 
