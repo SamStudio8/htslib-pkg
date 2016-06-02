@@ -8,6 +8,10 @@ License:        MIT and BSD
 URL:            http://www.htslib.org
 Source0:        https://github.com/samtools/%{name}/releases/download/%{version}/%{name}-%{version}.tar.bz2
 
+# Currently not providing explicit support for building with bzip2/lzma support
+# as I am under the impression the implementation is a bit shaky from a comment
+# in the source https://github.com/samtools/htslib/blob/develop/Makefile#L36-38
+# Note that support for both are optional, not required for CRAM.
 BuildRequires:  glibc-common, zlib-devel, ncurses
 
 %description
@@ -75,11 +79,20 @@ rm -f %{buildroot}/%{_libdir}/libhts.a
 
 
 %changelog
-* Sat May 28 2016 Sam Nicholls <sam@samnicholls.net>
+* Thu Jun 2 2016 Sam Nicholls <sam@samnicholls.net> - 1.3.1-4
+- Fix changelog
+- Add comment RE:bzip2/lzma support
+
+* Sat May 28 2016 Sam Nicholls <sam@samnicholls.net> - 1.3.1-3
 - Add LICENSE and NEWS to doc
 - Remove unnecessary DESTDIR from call to make_install macro
 - Remove explicit Provides
-* Thu Apr 28 2016 Sam Nicholls <sam@samnicholls.net> - 755 SO to permit strip
-* Tue Apr 26 2016 Sam Nicholls <sam@samnicholls.net> - 1.3.1-1
+
+* Thu Apr 28 2016 Sam Nicholls <sam@samnicholls.net> - 1.3.1-1
+- Alter permissions of SO to permit strip
+
+* Tue Apr 26 2016 Sam Nicholls <sam@samnicholls.net> - 1.3.1-0
+- Update for htslib version 1.3.1
+
+* Tue Apr 12 2016 Sam Nicholls <sam@samnicholls.net> - 1.3.0-0
 - Initial version
-- 
