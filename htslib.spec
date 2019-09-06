@@ -1,5 +1,5 @@
 Name:           htslib
-Version:        1.3.1
+Version:        1.9
 Release:        1%{?dist}
 Summary:        C library for high-throughput sequencing data formats
 
@@ -8,11 +8,10 @@ License:        MIT and BSD
 URL:            http://www.htslib.org
 Source0:        https://github.com/samtools/%{name}/releases/download/%{version}/%{name}-%{version}.tar.bz2
 
-# Currently not providing explicit support for building with bzip2/lzma support
-# as I am under the impression the implementation is a bit shaky from a comment
-# in the source https://github.com/samtools/htslib/blob/develop/Makefile#L36-38
-# Note that support for both are optional, not required for CRAM.
-BuildRequires:  glibc-common, zlib-devel, ncurses
+BuildRequires:  gcc
+BuildRequires:  bzip2-devel
+BuildRequires:  xz-devel
+BuildRequires:  zlib-devel
 
 %description
 HTSlib is an implementation of a unified C library for accessing common file
@@ -59,7 +58,8 @@ rm -f %{buildroot}/%{_libdir}/libhts.a
 %postun -p /sbin/ldconfig
 
 %files
-%doc LICENSE NEWS
+%license LICENSE
+%doc NEWS
 %{_libdir}/libhts*.so.*
 
 %files devel
@@ -74,11 +74,15 @@ rm -f %{buildroot}/%{_libdir}/libhts.a
 %{_bindir}/bgzip
 %{_bindir}/htsfile
 %{_bindir}/tabix
+%{_mandir}/man1/bgzip.1.gz
 %{_mandir}/man1/htsfile.1.gz
 %{_mandir}/man1/tabix.1.gz
 
 
 %changelog
+* Fri Sep 06 2019 Jun Aruga <jaruga@redhat.com> - 1.9-1
+- Update for htslib version 1.9
+
 * Thu Jun 2 2016 Sam Nicholls <sam@samnicholls.net> - 1.3.1-4
 - Fix changelog
 - Add comment RE:bzip2/lzma support
