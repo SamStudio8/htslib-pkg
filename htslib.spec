@@ -1,9 +1,15 @@
+# The value of Makefile LIBHTS_SOVERSION.
+%global so_version 2
+
 Name:           htslib
 Version:        1.9
 Release:        1%{?dist}
 Summary:        C library for high-throughput sequencing data formats
 
-# The entire source code is MIT except cram/ which is Modified-BSD
+# The entire source code is MIT/Expat except cram/ which is Modified-BSD.
+# But as there is no "Expat" license in short name list, set "MIT".
+# Expat license is same with MIT license.
+# https://lists.fedoraproject.org/archives/list/legal@lists.fedoraproject.org/thread/C5AHVIW3F6LF5CYLR2PSHNANFYKP327P/
 License:        MIT and BSD
 URL:            http://www.htslib.org
 Source0:        https://github.com/samtools/%{name}/releases/download/%{version}/%{name}-%{version}.tar.bz2
@@ -40,43 +46,41 @@ the htsfile identifier tool, and the bgzip compression utility.
 %prep
 %setup -q
 
-
 %build
-make CFLAGS="%{optflags} -fPIC" %{?_smp_mflags}
+%make_build CFLAGS="%{optflags}" LDFLAGS="%{build_ldflags}"
 
 %install
-rm -rf %{buildroot}
 %make_install prefix=%{_prefix} libdir=%{_libdir}
-make install-so %{?_smp_mflags} prefix=%{_prefix} libdir=%{_libdir} DESTDIR=%{buildroot}
-chmod 755 %{buildroot}/%{_libdir}/libhts.so.%{version}
+pushd %{buildroot}/%{_libdir}
+chmod 755 libhts.so.%{version}
+popd
 
-find %{buildroot} -name '*.la' -exec rm -f {} ';'
+find %{buildroot} -name '*.la' -delete
 rm -f %{buildroot}/%{_libdir}/libhts.a
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
+%ldconfig_scriptlets
 
 %files
 %license LICENSE
 %doc NEWS
-%{_libdir}/libhts*.so.*
+%{_libdir}/libhts.so.%{version}
+%{_libdir}/libhts.so.%{so_version}
 
 %files devel
 %{_includedir}/htslib
+%{_libdir}/libhts.so
 %{_libdir}/pkgconfig/htslib.pc
-%{_mandir}/man5/faidx.5.gz
-%{_mandir}/man5/sam.5.gz
-%{_mandir}/man5/vcf.5.gz
-%{_libdir}/libhts*.so
+%{_mandir}/man5/faidx.5*
+%{_mandir}/man5/sam.5*
+%{_mandir}/man5/vcf.5*
 
 %files tools
 %{_bindir}/bgzip
 %{_bindir}/htsfile
 %{_bindir}/tabix
-%{_mandir}/man1/bgzip.1.gz
-%{_mandir}/man1/htsfile.1.gz
-%{_mandir}/man1/tabix.1.gz
+%{_mandir}/man1/bgzip.1*
+%{_mandir}/man1/htsfile.1*
+%{_mandir}/man1/tabix.1*
 
 
 %changelog
